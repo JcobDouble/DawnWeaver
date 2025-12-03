@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DawnWeaver.Api", "DawnWeaver.Api\DawnWeaver.Api.csproj", "{84F2A346-321A-4C12-BCDB-AA26C71210D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DawnWeaver.Persistance", "DawnWeaver.Persistance\DawnWeaver.Persistance.csproj", "{D077CC20-484C-4C86-AA3E-DE13BAACFA92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DawnWeaver.Infrastructure", "DawnWeaver.Infrastructure\DawnWeaver.Infrastructure.csproj", "{5B572750-7CEB-4194-91EF-92AC83C6A3EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DawnWeaver.Domain", "DawnWeaver.Domain\DawnWeaver.Domain.csproj", "{A3E63812-8A4A-457C-9630-23317CF4E410}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DawnWeaver.Application", "DawnWeaver.Application\DawnWeaver.Application.csproj", "{2DDDE182-967D-4E48-82B0-76F48FE47BD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DawnWeaver.Common", "DawnWeaver.Common\DawnWeaver.Common.csproj", "{05140BEF-69F1-4390-AF67-A40FBFC2F04D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84F2A346-321A-4C12-BCDB-AA26C71210D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84F2A346-321A-4C12-BCDB-AA26C71210D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84F2A346-321A-4C12-BCDB-AA26C71210D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84F2A346-321A-4C12-BCDB-AA26C71210D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D077CC20-484C-4C86-AA3E-DE13BAACFA92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D077CC20-484C-4C86-AA3E-DE13BAACFA92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D077CC20-484C-4C86-AA3E-DE13BAACFA92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D077CC20-484C-4C86-AA3E-DE13BAACFA92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B572750-7CEB-4194-91EF-92AC83C6A3EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B572750-7CEB-4194-91EF-92AC83C6A3EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B572750-7CEB-4194-91EF-92AC83C6A3EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B572750-7CEB-4194-91EF-92AC83C6A3EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3E63812-8A4A-457C-9630-23317CF4E410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3E63812-8A4A-457C-9630-23317CF4E410}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3E63812-8A4A-457C-9630-23317CF4E410}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3E63812-8A4A-457C-9630-23317CF4E410}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DDDE182-967D-4E48-82B0-76F48FE47BD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DDDE182-967D-4E48-82B0-76F48FE47BD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DDDE182-967D-4E48-82B0-76F48FE47BD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DDDE182-967D-4E48-82B0-76F48FE47BD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05140BEF-69F1-4390-AF67-A40FBFC2F04D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05140BEF-69F1-4390-AF67-A40FBFC2F04D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05140BEF-69F1-4390-AF67-A40FBFC2F04D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05140BEF-69F1-4390-AF67-A40FBFC2F04D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
