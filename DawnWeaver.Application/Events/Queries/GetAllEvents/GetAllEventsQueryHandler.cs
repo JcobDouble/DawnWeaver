@@ -13,12 +13,12 @@ public class GetAllEventsQueryHandler(IAppDbContext context) : IRequestHandler<G
         
         var allEvents = new AllEventsViewModel()
         {
-            Events = eventsInDb.Select(e => new AllEventsDto
+            Events = eventsInDb.Where(e => e.StartDate is not null && e.EndDate is not null).Select(e => new AllEventsDto
             {
                 Id = e.Id,
                 Title = e.Title,
-                StartDate = e.StartDate,
-                EndDate = e.EndDate
+                StartDate = e.StartDate!.Value,
+                EndDate = e.EndDate!.Value
             }).ToList()
         };
         

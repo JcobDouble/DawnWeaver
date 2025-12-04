@@ -4,17 +4,19 @@ using Microsoft.Extensions.Logging;
 
 namespace DawnWeaver.Application.Common.Behaviours;
 
-public class PerformanceBehaviour<TRequest, TResponse>(ILogger<TRequest> logger, Stopwatch timer) : IPipelineBehavior<TRequest, TResponse>
+public class PerformanceBehaviour<TRequest, TResponse>(ILogger<TRequest> logger) : IPipelineBehavior<TRequest, TResponse>
 {
+    private readonly Stopwatch _timer = new();
+
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        timer.Start();
+        _timer.Start();
         
         var response = await next();
         
-        timer.Stop();
+        _timer.Stop();
         
-        var elapsedMilliseconds = timer.ElapsedMilliseconds;
+        var elapsedMilliseconds = _timer.ElapsedMilliseconds;
         
         if (elapsedMilliseconds > 500)
         {

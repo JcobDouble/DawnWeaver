@@ -2,6 +2,7 @@
 using DawnWeaver.Application.Common.Mapping;
 using DawnWeaver.Application.Events.Queries.GetEventDetail;
 using DawnWeaver.Domain.Entities;
+using DawnWeaver.Domain.Enums;
 using MediatR;
 
 namespace DawnWeaver.Application.Events.Commands.AddEvent;
@@ -20,7 +21,8 @@ public class AddEventCommandHandler(IAppDbContext context) : IRequestHandler<Add
             IsRecurring = request.IsRecurring,
             DurationInMinutes = request.DurationInMinutes,
             EventTypeId = request.EventTypeId,
-            EventType = context.EventTypes.FirstOrDefault(e => e.Id == request.EventTypeId)!
+            EventType = context.EventTypes.FirstOrDefault(e => e.Id == request.EventTypeId)!,
+            Status = EventStatus.Confirmed
         };
         
         context.Events.Add(newEvent);

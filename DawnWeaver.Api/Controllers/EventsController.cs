@@ -61,3 +61,5 @@ public class EventsController : BaseController
         return Ok();
     }
 }
+
+// Dodać obsługę delete dla eventów powtarzalnych - usunąć wszystkie wystąpienia lub tylko jedno (dodać do delete flagę deleteSimilar lub coś takiego i wtedy usunąć wszystkie eventy o tym samym tytule i CreatedAt)

@@ -27,6 +27,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IDateTime date
                 case EntityState.Added:
                     entry.Entity.CreatedBy = string.Empty;
                     entry.Entity.CreatedAt = dateTime.Now;
+                    entry.Entity.UpdatedBy = string.Empty;
+                    entry.Entity.UpdatedAt = dateTime.Now;
                     break;
                 case EntityState.Modified:
                     entry.Entity.UpdatedBy = string.Empty;
