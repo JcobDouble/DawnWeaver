@@ -24,10 +24,6 @@ public class UpdateEventCommandValidator : AbstractValidator<UpdateEventCommand>
         RuleFor(e => e.StartDate)
             .GreaterThan(_ => dateTime.Now)
             .WithMessage("Event date must be in the future.");
-        
-        RuleFor(e => e.EndDate)
-            .GreaterThan(e => e.StartDate)
-            .WithMessage("End date must be greater than start date.");
 
         RuleFor(e => e.DurationInMinutes)
             .NotEmpty()

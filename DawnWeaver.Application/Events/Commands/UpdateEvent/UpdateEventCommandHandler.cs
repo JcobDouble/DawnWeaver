@@ -17,10 +17,12 @@ public class UpdateEventCommandHandler(IAppDbContext context) :IRequestHandler<U
             throw new Exception("Event not found");
         }
         
+        var endDate = request.StartDate.AddMinutes(request.DurationInMinutes);
+        
         eventInDb.Title = request.Title;
         eventInDb.Description = request.Description;
         eventInDb.StartDate = request.StartDate;
-        eventInDb.EndDate = request.EndDate;
+        eventInDb.EndDate = endDate;
         eventInDb.IsAllDay = request.IsAllDay;
         eventInDb.IsRecurring = request.IsRecurring;
         eventInDb.DurationInMinutes = request.DurationInMinutes;

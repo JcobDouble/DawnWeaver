@@ -11,12 +11,14 @@ public class AddEventCommandHandler(IAppDbContext context) : IRequestHandler<Add
 {
     public async Task<EventDetailViewModel> Handle(AddEventCommand request, CancellationToken cancellationToken)
     {
+        var endDate = request.StartDate.AddMinutes(request.DurationInMinutes);
+        
         var newEvent = new Event
         {
             Title = request.Title,
             Description = request.Description,
             StartDate = request.StartDate,
-            EndDate = request.EndDate,
+            EndDate = endDate,
             IsAllDay = request.IsAllDay,
             IsRecurring = request.IsRecurring,
             DurationInMinutes = request.DurationInMinutes,
