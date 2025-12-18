@@ -12,6 +12,8 @@ public class EventDetailViewModel
     public bool IsAllDay { get; set; } = false;
     public bool IsRecurring { get; set; } = false;
     public int DurationInMinutes { get; set; }
+    
+    
     public Guid EventTypeId { get; set; }
     public required string EventType { get; set; }
 }

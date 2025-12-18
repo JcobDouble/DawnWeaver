@@ -8,6 +8,7 @@ public interface IAppDbContext
     DbSet<Event> Events { get; set; }
     DbSet<EventType> EventTypes { get; set; }
     DbSet<User> Users { get; set; }
-
+    DbSet<EventException> EventExceptions { get; set; }
+    
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

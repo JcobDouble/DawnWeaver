@@ -22,9 +22,15 @@ public class EventsController : BaseController
     }
     
     [HttpGet]
-    public async Task<ActionResult<AllEventsViewModel>> GetAllEvents()
+    public async Task<ActionResult<AllEventsViewModel>> GetAllEvents([FromQuery] DateTime from, [FromQuery] DateTime to)
     {
-        var result = await Mediator.Send(new GetAllEventsQuery());
+        var query = new GetAllEventsQuery
+        {
+            From = from,
+            To = to
+        };
+        
+        var result = await Mediator.Send(query);
         
         return Ok(result);
     }

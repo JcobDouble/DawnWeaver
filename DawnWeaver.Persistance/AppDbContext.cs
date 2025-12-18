@@ -11,6 +11,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IDateTime date
     public DbSet<Event> Events { get; set; }
     public DbSet<EventType> EventTypes { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<EventException> EventExceptions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
