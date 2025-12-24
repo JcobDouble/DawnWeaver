@@ -3,6 +3,7 @@ using DawnWeaver.Application.Common.Mapping;
 using DawnWeaver.Application.Events.Queries.GetEventDetail;
 using DawnWeaver.Domain.Entities;
 using DawnWeaver.Domain.Enums;
+using Ical.Net.DataTypes;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,8 @@ public class UpdateEventCommandHandler(IAppDbContext context) :IRequestHandler<U
     public async Task<EventDetailViewModel> Handle(UpdateEventCommand request, CancellationToken cancellationToken)
     {
         var eventInDb = await context.Events.Include(e => e.EventType).FirstOrDefaultAsync(e => e.Id == request.Id, cancellationToken);
+        Event resultEvent = null!;
+        
         
         if (eventInDb == null)
         {
@@ -40,6 +43,8 @@ public class UpdateEventCommandHandler(IAppDbContext context) :IRequestHandler<U
                 eventInDb.RRule = request.RecurrenceDto is not null ? RRuleBuilder.BuildRRule(request.RecurrenceDto) : eventInDb.RRule;
             else
                 eventInDb.RRule = null;
+
+            resultEvent = eventInDb;
         }
 
         if (request.RecurrenceType == RecurrenceType.OnlyThis)
@@ -53,7 +58,7 @@ public class UpdateEventCommandHandler(IAppDbContext context) :IRequestHandler<U
             
             context.EventExceptions.Add(eventException);
             
-            var newEvent = new Event
+            resultEvent = new Event
             {
                 Title = request.Title ?? eventInDb.Title,
                 Description = request.Description,
@@ -67,15 +72,51 @@ public class UpdateEventCommandHandler(IAppDbContext context) :IRequestHandler<U
                 Status = EventStatus.Confirmed
             };
             
-            context.Events.Add(newEvent);
+            context.Events.Add(resultEvent);
             
             // Co jeśli użytkownik kliknie na główny event
         }
+        
+        if (request.RecurrenceType == RecurrenceType.ThisAndFollowing)
+        {
+            var rule = new RecurrencePattern(eventInDb.RRule);
+            rule.Until = new CalDateTime(request.StartDate.Value.Subtract(TimeSpan.FromMinutes(1)));
+            rule.Count = null;
+            
+            resultEvent = new Event
+            {
+                Title = request.Title ?? eventInDb.Title,
+                Description = request.Description,
+                StartDate = request.StartDate ?? eventInDb.StartDate,
+                EndDate = endDate,
+                IsAllDay = request.IsAllDay ?? eventInDb.IsAllDay,
+                IsRecurring = true,
+                DurationInMinutes = duration,
+                EventTypeId = request.EventTypeId ?? eventInDb.EventTypeId,
+                RRule = request.RecurrenceDto is not null ? RRuleBuilder.BuildRRule(request.RecurrenceDto) : eventInDb.RRule,
+                Status = EventStatus.Confirmed
+            };
 
-        // Dodać DbSet<EventExceptions> i DI potrzebne
+            eventInDb.RRule = rule.ToString();
+            
+            var eventExceptions = eventInDb.EventExceptions;
+
+            if (eventInDb.EventExceptions.Any())
+            {
+                foreach (var eventException in eventExceptions)
+                {
+                    if (eventException.OriginalOccurrence >= request.StartDate)
+                    {
+                        context.EventExceptions.Remove(eventException);
+                    }
+                }
+            }
+            
+            context.Events.Add(resultEvent);
+        }
         
         await context.SaveChangesAsync(cancellationToken);
-        
-        return eventInDb.MapToEventDetailViewModel();
+
+        return resultEvent.MapToEventDetailViewModel();
     }
 }
