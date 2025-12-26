@@ -36,6 +36,7 @@ public class UpdateEventCommandHandler(IAppDbContext context) :IRequestHandler<U
             eventInDb.IsRecurring = request.IsRecurring ?? eventInDb.IsRecurring;
             eventInDb.DurationInMinutes = request.DurationInMinutes ?? eventInDb.DurationInMinutes;
             eventInDb.EventTypeId = request.EventTypeId ?? eventInDb.EventTypeId;
+            eventInDb.EventType = context.EventTypes.FirstOrDefault(e => e.Id == eventInDb.EventTypeId)!;
             eventInDb.Status = EventStatus.Confirmed;
             if(request.IsRecurring is null)
                 eventInDb.RRule = eventInDb.RRule;
@@ -71,6 +72,8 @@ public class UpdateEventCommandHandler(IAppDbContext context) :IRequestHandler<U
                 RRule = null,
                 Status = EventStatus.Confirmed
             };
+
+            resultEvent.EventType = context.EventTypes.FirstOrDefault(e => e.Id == resultEvent.EventTypeId)!;
             
             context.Events.Add(resultEvent);
             
@@ -96,7 +99,9 @@ public class UpdateEventCommandHandler(IAppDbContext context) :IRequestHandler<U
                 RRule = request.RecurrenceDto is not null ? RRuleBuilder.BuildRRule(request.RecurrenceDto) : eventInDb.RRule,
                 Status = EventStatus.Confirmed
             };
-
+            
+            resultEvent.EventType = context.EventTypes.FirstOrDefault(e => e.Id == resultEvent.EventTypeId)!;
+            
             eventInDb.RRule = rule.ToString();
             
             var eventExceptions = eventInDb.EventExceptions;

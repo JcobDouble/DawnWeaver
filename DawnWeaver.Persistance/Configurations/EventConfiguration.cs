@@ -26,5 +26,8 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
         builder.Property(e => e.DurationInMinutes)
             .IsRequired()
             .HasDefaultValue(60);
+
+        builder.HasMany(e => e.EventExceptions)
+            .WithOne(e => e.Event);
     }
 }

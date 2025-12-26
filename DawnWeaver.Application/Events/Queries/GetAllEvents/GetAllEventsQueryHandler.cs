@@ -11,12 +11,17 @@ public class GetAllEventsQueryHandler(IAppDbContext context) : IRequestHandler<G
 {
     public async Task<AllEventsViewModel> Handle(GetAllEventsQuery request, CancellationToken cancellationToken)
     {
-        var eventsInDb = await context.Events.ToListAsync(cancellationToken);
+        var eventsInDb = await context.Events.Include(e => e.EventExceptions).ToListAsync(cancellationToken);
         
         var outputInstances = new List<AllEventsDto>();
 
         foreach (var e in eventsInDb)
         {
+            var exceptionsByDate = e.EventExceptions
+                .ToDictionary(ex => ex.OriginalOccurrence, ex => ex);
+            
+            var exceptions = e.EventExceptions;
+            
             if (e.StartDate is null && e.EndDate is null)
                 continue;
 
@@ -25,6 +30,11 @@ public class GetAllEventsQueryHandler(IAppDbContext context) : IRequestHandler<G
             {
                 if (e.StartDate < request.To && e.EndDate > request.From)
                 {
+                    if (exceptionsByDate.TryGetValue(e.StartDate.Value, out var exception))
+                    {
+                        if (exception.IsCancelled)
+                            continue;
+                    }
                     outputInstances.Add(new AllEventsDto
                     {
                         Id = e.Id,
@@ -45,15 +55,12 @@ public class GetAllEventsQueryHandler(IAppDbContext context) : IRequestHandler<G
                     new RecurrencePattern(e.RRule)
                 }
             };
-
+            
             var calendar = new Calendar();
             calendar.Events.Add(calendarEvent);
 
             var occurrences = calendar.GetOccurrences(new CalDateTime(request.From))
                 .TakeWhileBefore(new CalDateTime(request.To));
-
-            var exceptionsByDate = e.EventExceptions
-                .ToDictionary(ex => ex.OriginalOccurrence, ex => ex);
             
             foreach (var occurrence in occurrences)
             {
@@ -72,7 +79,7 @@ public class GetAllEventsQueryHandler(IAppDbContext context) : IRequestHandler<G
                     Id = e.Id,
                     Title = e.Title,
                     StartDate = occurrence.Period.StartTime.Value,
-                    EndDate = occurrence.Period.EndTime.Value
+                    EndDate = occurrence.Period.StartTime.Value.AddMinutes(e.DurationInMinutes)
                 });
             }
         }
