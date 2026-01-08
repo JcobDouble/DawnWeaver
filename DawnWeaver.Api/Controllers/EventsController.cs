@@ -3,6 +3,7 @@ using DawnWeaver.Application.Events.Commands.RemoveEvent;
 using DawnWeaver.Application.Events.Commands.UpdateEvent;
 using DawnWeaver.Application.Events.Queries.GetAllEvents;
 using DawnWeaver.Application.Events.Queries.GetEventDetail;
+using DawnWeaver.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DawnWeaver.Api.Controllers;
@@ -57,15 +58,15 @@ public class EventsController : BaseController
     }
 
     [HttpDelete("remove/{eventId}")]
-    public async Task<ActionResult> RemoveEvent(Guid eventId)
+    public async Task<ActionResult> RemoveEvent(Guid eventId, [FromQuery] DateTime occurrenceDate, [FromQuery] RecurrenceType recurrenceType)
     {
         await Mediator.Send(new RemoveEventCommand
         {
-            EventId = eventId
+            EventId = eventId,
+            OccurrenceDate = occurrenceDate,
+            RecurrenceType = recurrenceType
         });
 
         return Ok();
     }
 }
-
-// Dodać obsługę delete dla eventów powtarzalnych - usunąć wszystkie wystąpienia lub tylko jedno (dodać do delete flagę deleteSimilar lub coś takiego i wtedy usunąć wszystkie eventy o tym samym tytule i CreatedAt)

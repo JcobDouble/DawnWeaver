@@ -76,8 +76,6 @@ public class UpdateEventCommandHandler(IAppDbContext context) :IRequestHandler<U
             resultEvent.EventType = context.EventTypes.FirstOrDefault(e => e.Id == resultEvent.EventTypeId)!;
             
             context.Events.Add(resultEvent);
-            
-            // Co jeśli użytkownik kliknie na główny event
         }
         
         if (request.RecurrenceType == RecurrenceType.ThisAndFollowing)
@@ -106,15 +104,13 @@ public class UpdateEventCommandHandler(IAppDbContext context) :IRequestHandler<U
             
             var eventExceptions = eventInDb.EventExceptions;
 
-            if (eventInDb.EventExceptions.Any())
+            if (eventExceptions.Any())
             {
-                foreach (var eventException in eventExceptions)
-                {
-                    if (eventException.OriginalOccurrence >= request.StartDate)
-                    {
-                        context.EventExceptions.Remove(eventException);
-                    }
-                }
+                var eventExceptionsToRemove = eventInDb.EventExceptions
+                    .Where(e => e.OriginalOccurrence >= request.OccurrenceStart)
+                    .ToList();
+                
+                context.EventExceptions.RemoveRange(eventExceptionsToRemove);
             }
             
             context.Events.Add(resultEvent);
