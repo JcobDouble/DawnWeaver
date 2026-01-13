@@ -19,7 +19,7 @@ public class EventsController : BaseController
             EventId = eventId
         });
         
-        return Ok(result);
+        return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
     }
     
     [HttpGet]
@@ -54,19 +54,19 @@ public class EventsController : BaseController
         
         var result = await Mediator.Send(command);
         
-        return Ok(result);
+        return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
     }
 
     [HttpDelete("remove/{eventId}")]
-    public async Task<ActionResult> RemoveEvent(Guid eventId, [FromQuery] DateTime occurrenceDate, [FromQuery] RecurrenceType recurrenceType)
+    public async Task<IActionResult> RemoveEvent(Guid eventId, [FromQuery] DateTime occurrenceDate, [FromQuery] RecurrenceType recurrenceType)
     {
-        await Mediator.Send(new RemoveEventCommand
+        var result = await Mediator.Send(new RemoveEventCommand
         {
             EventId = eventId,
             OccurrenceDate = occurrenceDate,
             RecurrenceType = recurrenceType
         });
 
-        return Ok();
+        return result.IsSuccess ? Ok() : HandleFailure(result);
     }
 }

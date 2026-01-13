@@ -1,17 +1,19 @@
 ﻿using DawnWeaver.Application.Common.Interfaces;
 using DawnWeaver.Application.Common.Mapping;
 using DawnWeaver.Application.Events.Queries.GetEventDetail;
+using DawnWeaver.Domain.Common;
 using DawnWeaver.Domain.Entities;
 using DawnWeaver.Domain.Enums;
+using DawnWeaver.Domain.Errors;
 using Ical.Net.DataTypes;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DawnWeaver.Application.Events.Commands.UpdateEvent;
 
-public class UpdateEventCommandHandler(IAppDbContext context) :IRequestHandler<UpdateEventCommand, EventDetailViewModel>
+public class UpdateEventCommandHandler(IAppDbContext context) :IRequestHandler<UpdateEventCommand, ResultT<EventDetailViewModel>>
 {
-    public async Task<EventDetailViewModel> Handle(UpdateEventCommand request, CancellationToken cancellationToken)
+    public async Task<ResultT<EventDetailViewModel>> Handle(UpdateEventCommand request, CancellationToken cancellationToken)
     {
         var eventInDb = await context.Events.Include(e => e.EventType).FirstOrDefaultAsync(e => e.Id == request.Id, cancellationToken);
         Event resultEvent = null!;
@@ -19,7 +21,7 @@ public class UpdateEventCommandHandler(IAppDbContext context) :IRequestHandler<U
         
         if (eventInDb == null)
         {
-            throw new Exception("Event not found");
+            return Result.Failure<EventDetailViewModel>(EventErrors.EventNotFound);
         }
         
         var duration = request.DurationInMinutes ?? eventInDb.DurationInMinutes;
@@ -118,6 +120,8 @@ public class UpdateEventCommandHandler(IAppDbContext context) :IRequestHandler<U
         
         await context.SaveChangesAsync(cancellationToken);
 
-        return resultEvent.MapToEventDetailViewModel();
+        var mappedResult = resultEvent.MapToEventDetailViewModel();
+        
+        return Result.Success(mappedResult);
     }
 }

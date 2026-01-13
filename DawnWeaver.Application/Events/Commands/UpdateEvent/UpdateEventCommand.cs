@@ -1,11 +1,12 @@
 ﻿using DawnWeaver.Application.Events.Commands.AddEvent;
 using DawnWeaver.Application.Events.Queries.GetEventDetail;
+using DawnWeaver.Domain.Common;
 using DawnWeaver.Domain.Enums;
 using MediatR;
 
 namespace DawnWeaver.Application.Events.Commands.UpdateEvent;
 
-public class UpdateEventCommand : IRequest<EventDetailViewModel>
+public class UpdateEventCommand : IRequest<ResultT<EventDetailViewModel>>
 {
     public Guid Id { get; set; }
     public string? Title { get; set; }

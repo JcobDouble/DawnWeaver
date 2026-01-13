@@ -1,21 +1,23 @@
 ﻿using DawnWeaver.Application.Common.Interfaces;
+using DawnWeaver.Domain.Common;
 using DawnWeaver.Domain.Entities;
 using DawnWeaver.Domain.Enums;
+using DawnWeaver.Domain.Errors;
 using Ical.Net.DataTypes;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DawnWeaver.Application.Events.Commands.RemoveEvent;
 
-public class RemoveEventCommandHandler(IAppDbContext context) : IRequestHandler<RemoveEventCommand>
+public class RemoveEventCommandHandler(IAppDbContext context) : IRequestHandler<RemoveEventCommand, Result>
 {
-    public async Task Handle(RemoveEventCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(RemoveEventCommand request, CancellationToken cancellationToken)
     {
         var eventInDb = await context.Events.Include(e => e.EventExceptions).FirstOrDefaultAsync(e => e.Id == request.EventId, cancellationToken);
         
         if (eventInDb == null)
         {
-            throw new KeyNotFoundException($"Event with ID {request.EventId} not found.");
+            return Result.Failure(EventErrors.EventNotFound);
         }
         
         if(!eventInDb.IsRecurring || request.RecurrenceType == RecurrenceType.AllOccurrences)
@@ -49,8 +51,6 @@ public class RemoveEventCommandHandler(IAppDbContext context) : IRequestHandler<
 
                 if (eventExceptions.Any())
                 {
-                    // zrobić to samo w update handler zamiast foreach
-
                     var exceptionsToRemove = eventInDb.EventExceptions
                         .Where(e => e.OriginalOccurrence >= request.OccurrenceDate)
                         .ToList();
@@ -61,5 +61,7 @@ public class RemoveEventCommandHandler(IAppDbContext context) : IRequestHandler<
         }
         
         await context.SaveChangesAsync(cancellationToken);
+        
+        return Result.Success();
     }
 }

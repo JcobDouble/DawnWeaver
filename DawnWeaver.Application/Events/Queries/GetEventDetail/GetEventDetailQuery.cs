@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using DawnWeaver.Domain.Common;
+using MediatR;
 
 namespace DawnWeaver.Application.Events.Queries.GetEventDetail;
 
-public class GetEventDetailQuery : IRequest<EventDetailViewModel>
+public class GetEventDetailQuery : IRequest<ResultT<EventDetailViewModel>>
 {
     public Guid EventId { get; set; }
 }
