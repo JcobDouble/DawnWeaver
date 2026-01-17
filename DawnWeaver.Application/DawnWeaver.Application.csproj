@@ -21,4 +21,8 @@
       <ProjectReference Include="..\DawnWeaver.Domain\DawnWeaver.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="TimeManagement\Commands\" />
+    </ItemGroup>
+
 </Project>
