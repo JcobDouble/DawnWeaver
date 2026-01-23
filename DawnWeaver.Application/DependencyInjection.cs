@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using DawnWeaver.Application.Common.Behaviours;
 using DawnWeaver.Application.Services;
+using DawnWeaver.Application.Services.TimeManagement;
 using FluentValidation;
 using MediatR;
 using MediatR.Pipeline;
@@ -16,8 +17,10 @@ public static class DependencyInjection
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         
         services.AddScoped<GetAllEventsService>();
+        services.AddScoped<TimeProposalService>();
         
         services.AddTransient(typeof(IRequestPreProcessor<>), typeof(LoggingBehaviour<>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
         
         return services;

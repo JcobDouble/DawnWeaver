@@ -1,6 +1,5 @@
 ﻿using DawnWeaver.Application.Common.Interfaces;
 using FluentValidation;
-using Microsoft.Extensions.Validation;
 
 namespace DawnWeaver.Application.Events.Commands.AddEvent;
 
