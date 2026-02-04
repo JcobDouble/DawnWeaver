@@ -44,6 +44,14 @@ public class EventsController : BaseController
         return Ok(result);
     }
 
+    [HttpGet("{eventId}/collisions")]
+    public async Task<ActionResult<List<DateTime>>> CheckForCollisions()
+    {
+        var result = await Mediator.Send(new CheckForCollisionsQuery());
+        
+        return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
+    }
+    
     [HttpPut("update/{eventId}")]
     public async Task<ActionResult<EventDetailViewModel>> UpdateEvent(Guid eventId, UpdateEventCommand command)
     {

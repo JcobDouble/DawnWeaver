@@ -18,6 +18,7 @@ public static class DependencyInjection
         
         services.AddScoped<GetAllEventsService>();
         services.AddScoped<TimeProposalService>();
+        services.AddScoped<CollisionService>();
         
         services.AddTransient(typeof(IRequestPreProcessor<>), typeof(LoggingBehaviour<>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));

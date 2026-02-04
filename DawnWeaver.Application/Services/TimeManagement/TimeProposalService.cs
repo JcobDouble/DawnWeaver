@@ -42,6 +42,7 @@ public class TimeProposalService(IDateTime dateTime, GetAllEventsService service
         return suitableFreeTimes;
     }
     
+    // Merguje nachodzące na siebie daty [startDate, endDate]
     private List<DateTime[]> Normalize(List<DateTime[]> eventsDates)
     {
         eventsDates.Sort((a, b) => a[0].CompareTo(b[0]));
@@ -67,6 +68,7 @@ public class TimeProposalService(IDateTime dateTime, GetAllEventsService service
         return result;
     }
     
+    // Wylicza wolne sloty na podstawie zajętych przedziałów [startFreeDate, endFreeDate]
     private List<DateTime[]> Calculate(List<DateTime[]> result, int iterationAdder)
     {
         List<DateTime[]> freeTimes = new List<DateTime[]>();
@@ -93,6 +95,7 @@ public class TimeProposalService(IDateTime dateTime, GetAllEventsService service
         return freeTimes;
     }
     
+    // Znajdź wolne sloty które pomieszczą wydarzenie
     private void Find(List<DateTime[]> freeTimes, List<DateTime> suitableFreeTimes, int eventDurationInMinutes)
     {
         for (int i = 0; i < freeTimes.Count; i++)
