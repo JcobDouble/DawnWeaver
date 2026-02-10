@@ -1,6 +1,7 @@
 ﻿using DawnWeaver.Application.Events.Commands.AddEvent;
 using DawnWeaver.Application.Events.Commands.RemoveEvent;
 using DawnWeaver.Application.Events.Commands.UpdateEvent;
+using DawnWeaver.Application.Events.Queries.CheckForCollisions;
 using DawnWeaver.Application.Events.Queries.GetAllEvents;
 using DawnWeaver.Application.Events.Queries.GetEventDetail;
 using DawnWeaver.Domain.Enums;
@@ -45,7 +46,7 @@ public class EventsController : BaseController
     }
 
     [HttpGet("{eventId}/collisions")]
-    public async Task<ActionResult<List<DateTime>>> CheckForCollisions()
+    public async Task<ActionResult<AllEventsViewModel>> CheckForCollisions()
     {
         var result = await Mediator.Send(new CheckForCollisionsQuery());
         
