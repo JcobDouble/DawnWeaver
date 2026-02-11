@@ -32,7 +32,13 @@ public class UpdateEventCommandHandler(IAppDbContext context) :IRequestHandler<U
         {
             eventInDb.Title = request.Title ?? eventInDb.Title;
             eventInDb.Description = request.Description;
-            eventInDb.StartDate = request.StartDate ?? eventInDb.StartDate;
+            eventInDb.StartDate = request.StartDate is null ? eventInDb.StartDate : new DateTime(
+                eventInDb.StartDate!.Value.Year,
+                eventInDb.StartDate.Value.Month, 
+                eventInDb.StartDate.Value.Day, 
+                request.StartDate.Value.Hour, 
+                request.StartDate.Value.Minute, 
+                request.StartDate.Value.Second);
             eventInDb.EndDate = endDate;
             eventInDb.IsAllDay = request.IsAllDay ?? eventInDb.IsAllDay;
             eventInDb.IsRecurring = request.IsRecurring ?? eventInDb.IsRecurring;
